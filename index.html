@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artisania - L'Art du Fait Main</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+   
+    <header class="header">
+        <div class="logo">Artisania<span>.</span></div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#accueil" class="nav-link active" onclick="afficherAccueil()">Accueil</a></li>
+                <li><a href="#boutique" class="nav-link" onclick="afficherBoutique()">Boutique</a></li>
+                <li><a href="#about" class="nav-link">À propos</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="nav-icons">
+            <div class="icon-btn">♡ <span class="badge-count">0</span></div>
+            <div class="icon-btn" onclick="basculerAffichagePanier()">🛒 <span class="badge-count" id="cart-count">0</span></div>
+        </div>
+    </header>
+
+    <section id="accueil" class="hero-slider">
+        <div class="slide active slide-bg-1">
+            <div class="slide-content">
+                <span class="hero-subtitle">— PROMOTION SPÉCIALE D'AUTOMNE —</span>
+                <h1>Jusqu'à -20% sur la <br><em>Décoration</em></h1>
+                <p>Embellissez votre intérieur avec des pièces uniques façonnées à la main par nos maîtres artisans.</p>
+                <a href="#boutique" class="btn-primary" onclick="afficherBoutique()">Profiter des Offres →</a>
+            </div>
+        </div>
+        <div class="slide slide-bg-2">
+            <div class="slide-content">
+                <span class="hero-subtitle">— NOUVELLE COLLECTION —</span>
+                <h1>L'Art du Fait Main <br><em>Révélé</em> Chez Vous</h1>
+                <p>Découvrez des créations authentiques, durables et éco-conçues.</p>
+                <a href="#boutique" class="btn-primary" onclick="afficherBoutique()">Découvrir la Collection →</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="categories-section container" id="section-categories">
+        <h2 class="section-title">Explorez nos Catégories</h2>
+        <div class="categories-grid">
+            <div class="cat-card" onclick="filtrerParCategorieRapide('deco')">
+                <img src="https://assets.wfcdn.com/im/40182236/resize-h800-w800%5Ecompr-r85/2663/266307223/Brisamar+Ceramic+Jar.jpg" alt="Décoration">
+                <h3>Décoration</h3>
+            </div>
+            <div class="cat-card" onclick="filtrerParCategorieRapide('bijoux')">
+                <img src="https://i.pinimg.com/originals/90/a0/27/90a027bae298771077757379bf2ed4f3.jpg" alt="Bijoux">
+                <h3>Bijoux</h3>
+            </div>
+            <div class="cat-card" onclick="filtrerParCategorieRapide('accessoires')">
+                <img src="https://shopsalvationarmyblob.blob.core.windows.net/assets/media/2915aa01-e131-42d2-b80f-db17dd068c13_largesize.jpg" alt="Accessoires">
+                <h3>Accessoires</h3>
+            </div>
+        </div>
+    </section>
+
+    <section id="accueil-populaires" class="shop-container container">
+        <h2 class="section-title">Produits Populaires</h2>
+        <div class="products-grid" id="popular-products-grid"></div>
+    </section>
+
+    
+    <section id="boutique" class="shop-container container" style="display: none;">
+        <h2 class="section-title">Notre Boutique</h2>
+        
+        <div class="shop-layout">
+           
+            <aside class="filters-sidebar">
+                <h3>Filtres</h3>
+                
+                <div class="filter-group">
+                    <label>Recherche</label>
+                    <input type="text" id="search-input" placeholder="Rechercher un produit..." oninput="appliquerFiltres()" class="form-control">
+                </div>
+
+                <div class="filter-group">
+                    <label>Catégorie</label>
+                    <select id="category-filter" onchange="appliquerFiltres()" class="form-control">
+                        <option value="tous">Toutes les catégories</option>
+                        <option value="deco">Décoration</option>
+                        <option value="bijoux">Bijoux</option>
+                        <option value="accessoires">Accessoires</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Prix max: <span id="price-output">200</span> DT</label>
+                    <input type="range" id="price-range" min="10" max="200" value="200" step="5" oninput="mettreAJourPrixMax(); appliquerFiltres();" class="range-slider">
+                </div>
+            </aside>
+
+            <div class="products-grid" id="products-grid"></div>
+        </div>
+    </section>
+
+
+    <div class="modal" id="product-modal">
+        <div class="modal-content modal-scrollable">
+            <span class="close-btn" onclick="fermerModaleProduit()">&times;</span>
+            <div class="modal-grid">
+                <img id="modal-img" src="" alt="Produit">
+                <div>
+                    <h2 id="modal-title" class="font-serif"></h2>
+                    <p class="modal-price" id="modal-price"></p>
+                    <p id="modal-desc" class="modal-desc"></p>
+                    <p><strong>Matériaux :</strong> Argile naturelle, émail artisanal</p>
+                    <div class="qty-group">
+                        <label>Quantité : </label>
+                        <input type="number" id="modal-qty" value="1" min="1" class="qty-input">
+                    </div>
+                    <button class="btn-primary btn-full" onclick="ajouterAuPanierDepuisModale()">Ajouter au Panier</button>
+                </div>
+            </div>
+
+            <div class="reviews-section">
+                <h3 class="reviews-title">Avis Clients & Évaluations</h3>
+                
+                <div id="reviews-list" class="reviews-list">
+                    <div class="review-item">
+                        <div class="review-author">Amin T. <span class="stars">★★★★★</span></div>
+                        <p class="review-text">Magnifique création, qualité au top ! Recommandé à 100%.</p>
+                    </div>
+                </div>
+
+                <form onsubmit="publierAvisClient(event)" class="review-form">
+                    <h4 class="form-subheading">Laisser un avis</h4>
+                    <div class="input-wrapper">
+                        <input type="text" id="review-name" required placeholder="Votre nom" class="form-control">
+                    </div>
+                    <div class="input-wrapper">
+                        <select id="review-rating" class="form-control">
+                            <option value="★★★★★">★★★★★ (5/5)</option>
+                            <option value="★★★★☆">★★★★☆ (4/5)</option>
+                            <option value="★★★☆☆">★★★☆☆ (3/5)</option>
+                            <option value="★★☆☆☆">★★☆☆☆ (2/5)</option>
+                            <option value="★☆☆☆☆">★☆☆☆☆ (1/5)</option>
+                        </select>
+                    </div>
+                    <div class="input-wrapper">
+                        <textarea id="review-text" required placeholder="Votre commentaire..." class="form-control textarea-control"></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit-review">Publier l'avis</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h3>Mon Panier</h3>
+            <span class="cart-close-icon" onclick="basculerAffichagePanier()">&times;</span>
+        </div>
+        <div class="cart-body" id="cart-items"></div>
+        <div class="cart-footer">
+            <div class="promo-wrapper">
+                <input type="text" id="promo-input" placeholder="Code promo (ex: ARTISAN10)" class="promo-input">
+                <button onclick="appliquerCodePromo()" class="btn-apply-promo">Appliquer</button>
+            </div>
+            <div class="cart-total-row">
+                <span>Total :</span>
+                <span id="cart-total">0.00 DT</span>
+            </div>
+            <button class="btn-primary btn-full" onclick="ouvrirPaiement()">Passer à la Caisse</button>
+        </div>
+    </div>*
+    
+
+    
+    <div class="checkout-modal" id="checkout-modal">
+        <div class="checkout-box">
+            <h2>Paiement Sécurisé & Livraison</h2>
+            <form onsubmit="validerCommande(event)" class="checkout-form">
+                <div class="form-group">
+                    <label>Nom et Prénom</label>
+                    <input type="text" required placeholder="Votre nom complet">
+                </div>
+                <div class="form-group">
+                    <label>Adresse de Livraison</label>
+                    <input type="text" required placeholder="Votre adresse">
+                </div>
+                
+                <div class="form-group">
+                    <label>Mode de paiement</label>
+                    <select id="payment-method" onchange="basculerChampsCarteBancaire()" required>
+                        <option value="card">Carte Bancaire</option>
+                        <option value="cod">Paiement à la livraison</option>
+                    </select>
+                </div>
+
+                <div id="card-fields">
+                    <div class="form-group">
+                        <label>Numéro de Carte Bancaire</label>
+                        <input type="text" id="card-number" placeholder="4500 XXXX XXXX XXXX">
+                    </div>
+                    <div class="form-row-group">
+                        <div class="form-group">
+                            <label>Date d'expiration</label>
+                            <input type="text" id="card-exp" placeholder="MM/AA">
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="password" id="card-cvv" placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="checkout-total-text">Total à régler : <span id="checkout-total">0.00 DT</span></div>
+                
+                <button type="submit" class="btn-primary btn-full btn-confirm-order">Confirmer la commande</button>
+                <button type="button" onclick="fermerPaiement()" class="btn-cancel">Annuler</button>
+            </form>
+        </div>
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col-brand">
+                <div class="footer-logo">Artisania<span>.</span></div>
+                <p>Mise en valeur de l'artisanat d'art fait main. Pièces authentiques, durables et éco-conçues pour illuminer votre intérieur.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul>
+                    <li><a href="#accueil" onclick="afficherAccueil()">Accueil</a></li>
+                    <li><a href="#boutique" onclick="afficherBoutique()">Boutique</a></li>
+                    <li><a href="#about">À propos</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Catégories</h4>
+                <ul>
+                    <li><a href="#">Céramique & Vases</a></li>
+                    <li><a href="#">Bijoux Fait Main</a></li>
+                    <li><a href="#">Textiles Naturels</a></li>
+                    <li><a href="#">Objets en Bois</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Assistance</h4>
+                <ul>
+                    <li><a href="#">Livraison & Retours</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Contactez-nous</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Artisania — Tous droits réservés.</p>
+            <div class="social-icons">
+                <a href="#">ig</a>
+                <a href="#">pi</a>
+                <a href="#">fb</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
